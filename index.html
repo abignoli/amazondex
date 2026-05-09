@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazondex - Tena Edition</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;background:#060a04;min-height:100vh;scroll-behavior:smooth;}
+body{font-family:'Press Start 2P',monospace;background:#060a04;min-height:100vh;color:#0e1a08;image-rendering:pixelated;}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);pointer-events:none;z-index:9999;}
+img,video{display:block;max-width:100%;}
+button{font-family:inherit;background:none;border:none;cursor:pointer;color:inherit;outline:none;-webkit-tap-highlight-color:transparent;}
+:root{--lb:#4e8c1e;--ldk:#0e1a08;--lm:#2e6014;--ll:#7ec840;--rs:#0c1c2c;--rd:#080e18;--rm:#122840;--rl:#1a4060;--gld:#b89618;--gldd:#6a5408;}
+.shell{max-width:1160px;margin:0 auto;background:#162612;border-radius:12px 12px 0 0;position:relative;box-shadow:inset -4px -4px 0 #020402,inset 4px 4px 0 #2e6018,0 8px 48px rgba(0,0,0,.9);padding:0 0 40px;}
+.shell::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:repeating-linear-gradient(90deg,#020402 0,#020402 6px,#162612 6px,#162612 12px);border-radius:12px 12px 0 0;}
+.bottom{max-width:1160px;margin:0 auto;background:var(--rs);border-radius:0 0 12px 12px;box-shadow:inset -4px -4px 0 var(--rd),inset 4px 4px 0 var(--rl),0 8px 40px rgba(0,0,0,.7);padding:24px 28px 36px;}
+.hdr{padding:20px 28px 0;display:flex;align-items:flex-start;gap:20px;}
+.eye{flex-shrink:0;width:72px;height:72px;background:radial-gradient(circle at 35% 35%,#90ffb0,#186a2e);border-radius:50%;border:6px solid #020402;box-shadow:0 0 0 3px #020402,0 0 24px rgba(90,170,46,.8),inset -4px -4px 8px rgba(0,0,0,.4);position:relative;animation:ep 3s ease-in-out infinite;}
+.eye::after{content:'';position:absolute;top:10px;left:10px;width:18px;height:18px;background:rgba(255,255,255,.75);border-radius:50%;}
+@keyframes ep{0%,100%{box-shadow:0 0 0 3px #020402,0 0 24px rgba(90,170,46,.8),inset -4px -4px 8px rgba(0,0,0,.4);}50%{box-shadow:0 0 0 3px #020402,0 0 50px rgba(90,170,46,1),inset -4px -4px 8px rgba(0,0,0,.4);}}
+.lts{display:flex;gap:8px;margin-top:8px;}
+.lt{width:14px;height:14px;border-radius:50%;border:2px solid rgba(0,0,0,.3);}
+.r{background:#ff4820;box-shadow:0 0 6px #ff4820;animation:bk 2s ease-in-out infinite;}
+.y{background:#ffd020;box-shadow:0 0 6px #ffd020;animation:bk 2s .7s ease-in-out infinite;}
+.g{background:#30e050;box-shadow:0 0 6px #30e050;animation:bk 2s 1.4s ease-in-out infinite;}
+@keyframes bk{0%,90%,100%{opacity:1;}95%{opacity:.3;}}
+.tlcd{flex:1;background:var(--lb);border:4px solid var(--ldk);box-shadow:inset 2px 2px 0 rgba(0,0,0,.25),0 4px 0 #020402;padding:12px 16px 14px;}
+.gtitle{font-size:clamp(1.4rem,5vw,3rem);color:var(--ldk);line-height:1;letter-spacing:-1px;display:block;}
+.gsub{font-size:.33rem;color:var(--lm);letter-spacing:2px;margin-top:8px;display:block;}
+.erow{display:flex;gap:10px;margin-top:10px;}
+.echip{font-size:.33rem;padding:4px 10px;letter-spacing:1px;border:2px solid var(--ldk);display:inline-flex;align-items:center;gap:4px;}
+.ecn{color:var(--ldk);background:rgba(0,8,0,.35);}
+.ecr{color:var(--ldk);background:rgba(0,18,48,.3);}
+.scp{margin:16px 28px 0;background:#020402;padding:4px;}
+.sci{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--ldk);gap:2px;}
+.sb{padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.sb.sv{background:#183808;grid-column:1/-1;}
+.sb.sn{background:#0e1a0e;}
+.sb.sr{background:var(--rm);}
+.slbl{font-size:.33rem;letter-spacing:1px;color:rgba(180,255,120,.75);}
+.snum{font-size:clamp(1.1rem,3vw,1.7rem);color:#b8ff70;line-height:1;text-shadow:2px 2px 0 rgba(0,0,0,.5);}
+.ssub{font-size:.27rem;color:rgba(180,255,120,.45);letter-spacing:1px;}
+.prp{margin:4px 28px 0;background:var(--ldk);padding:2px;}
+.prr{display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--lb);}
+.prl{font-size:.29rem;letter-spacing:1px;min-width:44px;color:var(--ldk);}
+.prt{flex:1;height:12px;background:var(--ll);border:2px solid var(--ldk);overflow:hidden;}
+.prf{height:100%;transition:width .8s steps(20);background:#183808;}
+.prp2{font-size:.29rem;min-width:32px;text-align:right;color:var(--ldk);}
+.ctl{margin:20px 28px 0;display:flex;flex-direction:column;gap:10px;}
+.info{background:#020402;padding:3px;}
+.infoi{background:var(--lb);padding:10px 14px;text-align:center;font-size:.29rem;letter-spacing:2px;color:var(--lm);}
+.flp{background:#020402;padding:3px;}
+.fli{background:var(--lb);padding:8px 10px;display:flex;flex-direction:column;gap:6px;}
+.fll{font-size:.27rem;letter-spacing:2px;color:var(--lm);text-align:center;}
+.flr{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
+.fb{font-size:.26rem;padding:5px 8px;letter-spacing:1px;border:2px solid var(--lm);background:var(--ll);color:var(--ldk);transition:background .08s,color .08s;user-select:none;}
+.fb:hover{background:var(--lm);color:var(--ll);}
+.fb.act{background:var(--ldk);color:var(--ll);border-color:var(--ldk);}
+.dvd{height:6px;margin:20px 28px 0;background:repeating-linear-gradient(90deg,#020402 0,#020402 12px,#2e6018 12px,#2e6018 14px,#122840 14px,#122840 26px,#2e6018 26px,#2e6018 28px);}
+.grd{padding:20px 28px 0;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;}
+.card{background:var(--lb);border:4px solid var(--ldk);position:relative;cursor:pointer;transition:transform .08s,box-shadow .08s;display:flex;flex-direction:column;box-shadow:4px 4px 0 var(--ldk);}
+.card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ldk);}
+.card:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ldk);}
+.card.unseen{background:var(--ll);border-color:var(--lm);box-shadow:4px 4px 0 var(--lm);}
+.card.seen{background:#183808;border-color:#060e02;box-shadow:4px 4px 0 #060e02;}
+.card.seen .cnum,.card.seen .cname,.card.seen .clat,.card.seen .cdsc,.card.seen .ccat,.card.seen .hbg{color:rgba(184,255,112,.9)!important;}
+.card::before{content:'';position:absolute;top:-1px;right:-1px;width:0;height:0;border-style:solid;border-width:0 18px 18px 0;border-color:transparent #060a04 transparent transparent;z-index:6;}
+.card.seen::before{border-color:transparent #040804 transparent transparent;}
+.fbg{position:absolute;top:6px;right:6px;font-size:.27rem;padding:3px 6px;letter-spacing:1px;z-index:5;border:2px solid rgba(184,255,112,.4);color:#b8ff70;background:rgba(0,0,0,.5);}
+.cnum{position:absolute;top:6px;left:8px;font-size:.33rem;color:var(--lm);z-index:5;}
+.ciw{width:100%;height:160px;overflow:hidden;background:var(--lm);position:relative;flex-shrink:0;border-bottom:3px solid var(--ldk);}
+.card.unseen .ciw{background:var(--ll);border-color:var(--lm);}
+.card.seen .ciw{background:#122808;border-color:#060e02;}
+.cimg{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
+.card:hover .cimg{transform:scale(1.06);}
+.cph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:.38rem;color:var(--ldk);letter-spacing:1px;}
+.spin{width:18px;height:18px;border:3px solid var(--lb);border-top-color:var(--ldk);border-radius:50%;animation:sp .8s steps(8) infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.cbdy{padding:12px;display:flex;flex-direction:column;flex:1;}
+.ctr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.ccat{font-size:.26rem;letter-spacing:2px;color:var(--lm);border:1px solid var(--lm);padding:2px 5px;}
+.hbg{font-size:.24rem;letter-spacing:1px;padding:2px 5px;border:1px solid;white-space:nowrap;}
+.hn{color:var(--ldk);border-color:var(--ldk);background:rgba(0,4,0,.3);}
+.hd{color:#0c2038;border-color:#0c2038;background:rgba(0,18,48,.2);}
+.hb{color:var(--gldd);border-color:var(--gldd);background:rgba(80,60,0,.12);}
+.cname{font-size:.57rem;color:var(--ldk);line-height:1.8;margin-bottom:4px;}
+.clat{font-family:'VT323',monospace;font-size:.9rem;font-style:italic;color:var(--lm);margin-bottom:8px;line-height:1.4;}
+.cdsc{font-family:'VT323',monospace;font-size:1.05rem;line-height:1.4;color:var(--lm);flex:1;margin-bottom:8px;}
+.cdsc.ld{height:48px;background:repeating-linear-gradient(90deg,var(--lm) 0,var(--lm) 6px,transparent 6px,transparent 10px);animation:ld 1s steps(1) infinite;}
+@keyframes ld{50%{opacity:.4;}}
+.stag{display:inline-block;font-size:.24rem;letter-spacing:1px;padding:2px 6px;border:1px solid;align-self:flex-start;}
+.scr{color:#ff1818;border-color:#ff1818;background:rgba(255,0,0,.08);}
+.sen{color:#ff7800;border-color:#ff7800;background:rgba(255,120,0,.08);}
+.svu{color:#b09000;border-color:#b09000;}
+.snt{color:var(--lm);border-color:var(--lm);}
+.slc{color:var(--ldk);border-color:var(--ldk);}
+.card.unseen .cbdy::after{content:'- UNREGISTERED -';font-size:.25rem;color:var(--lm);display:block;text-align:center;letter-spacing:2px;margin-top:8px;padding-top:8px;border-top:2px solid var(--lm);}
+.card.seen .cbdy::after{content:'- SEEN -';font-size:.25rem;color:rgba(184,255,112,.5);display:block;text-align:center;letter-spacing:2px;margin-top:8px;padding-top:8px;border-top:2px solid rgba(184,255,112,.25);}
+.empty{text-align:center;padding:60px 20px;color:var(--lm);font-size:.46rem;letter-spacing:2px;grid-column:1/-1;background:var(--ll);border:4px solid var(--lm);}
+.flogo{font-size:.7rem;color:#3e7c20;display:block;text-shadow:2px 2px 0 #080e18;letter-spacing:3px;margin-bottom:10px;text-align:center;}
+.ftxt{font-size:.26rem;letter-spacing:2px;color:rgba(62,124,32,.6);text-align:center;line-height:2.2;}
+#ss{position:fixed;bottom:12px;right:12px;z-index:10000;font-size:.32rem;padding:6px 10px;border:2px solid;letter-spacing:1px;transition:opacity .4s;background:#060a04;}
+.da{display:flex;align-items:center;justify-content:space-between;padding:0 20px;margin-top:8px;}
+.dp{width:60px;height:60px;position:relative;flex-shrink:0;}
+.dph{position:absolute;width:100%;height:33%;top:33%;left:0;background:#060a04;border-radius:3px;}
+.dpv{position:absolute;width:33%;height:100%;top:0;left:33%;background:#060a04;border-radius:3px;}
+.abs{display:flex;gap:10px;align-items:center;}
+.abn{border-radius:50%;border:3px solid rgba(0,0,0,.4);font-size:.33rem;color:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;}
+.aba{width:36px;height:36px;background:#226010;}
+.abb{width:36px;height:36px;background:#122840;}
+@media(max-width:600px){.shell,.bottom{margin:0;border-radius:0;}.hdr{padding:16px 14px 0;gap:12px;}.eye{width:52px;height:52px;}.scp,.prp,.ctl,.dvd,.grd{margin-left:14px;margin-right:14px;}.grid{grid-template-columns:1fr;}.gtitle{font-size:1.4rem;}.sci{grid-template-columns:1fr;}.sb.sv{grid-column:1;}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="hdr">
+    <div><div class="eye"></div><div class="lts"><div class="lt r"></div><div class="lt y"></div><div class="lt g"></div></div></div>
+    <div class="tlcd">
+      <span class="gtitle">AMAZONDEX</span>
+      <span class="gsub">TENA &middot; NAPO PROVINCE &middot; ECUADORIAN AMAZON</span>
+      <div class="erow"><span class="echip ecn">&#127769; NIGHT WALK</span><span class="echip ecr">&#128676; RIVER NAV</span></div>
+    </div>
+  </div>
+  <div class="scp"><div class="sci">
+    <div class="sb sv"><div class="slbl">SPECIES ENCOUNTERED</div><div class="snum" id="sc">0</div><div class="ssub">OF <span id="tc">0</span> TOTAL</div></div>
+    <div class="sb sn"><div class="slbl">NIGHT WALK</div><div class="snum" id="nc">0</div><div class="ssub">SEEN</div></div>
+    <div class="sb sr"><div class="slbl">RIVER / DAY</div><div class="snum" id="rc">0</div><div class="ssub">SEEN</div></div>
+  </div></div>
+  <div class="prp"><div class="prr"><div class="prl">SEEN</div><div class="prt"><div class="prf" id="prf" style="width:0%"></div></div><div class="prp2" id="prp2">0%</div></div></div>
+  <div class="ctl">
+    <div class="info"><div class="infoi">TAP ANY CARD TO MARK AS SEEN &mdash; TAP AGAIN TO UNDO</div></div>
+    <div class="flp"><div class="fli">
+      <div class="fll">&mdash; FILTER AMAZONDEX &mdash;</div>
+      <div class="flr">
+        <button class="fb act" data-f="all">ALL</button>
+        <button class="fb" data-f="mammal">MAMMALS</button>
+        <button class="fb" data-f="reptile">REPTILES</button>
+        <button class="fb" data-f="amphibian">AMPHIBIANS</button>
+        <button class="fb" data-f="bird">BIRDS</button>
+        <button class="fb" data-f="fish">FISH</button>
+        <button class="fb" data-f="invertebrate">BUGS &amp; INVERTS</button>
+        <button class="fb" data-f="arachnid">ARACHNIDS</button>
+      </div>
+      <div class="flr">
+        <button class="fb" data-f="night">NIGHT WALK</button>
+        <button class="fb" data-f="day">RIVER / DAY</button>
+        <button class="fb" data-f="both">BOTH</button>
+        <button class="fb" data-f="unseen">? UNREGISTERED</button>
+        <button class="fb" data-f="seen-found">SEEN</button>
+      </div>
+    </div></div>
+  </div>
+  <div class="dvd"></div>
+  <div class="grd"><div class="grid" id="grid"></div></div>
+</div>
+<div class="bottom">
+  <div class="da">
+    <div class="dp"><div class="dph"></div><div class="dpv"></div></div>
+    <div><span class="flogo">AMAZONDEX</span><div class="ftxt">TENA, NAPO &middot; ECUADORIAN AMAZON &middot; FIELD EDITION<br>JUNGLE NIGHT WALK + AMAZOONICO RIVER NAVIGATION</div></div>
+    <div class="abs"><div class="abn abb">B</div><div class="abn aba">A</div></div>
+  </div>
+</div>
+<script>
+const A=[
+{name:"Kinkajou",latin:"Potos flavus",cat:"mammal",s:"lc",h:"night"},
+{name:"Common Woolly Monkey",latin:"Lagothrix lagothricha",cat:"mammal",s:"vu",h:"day"},
+{name:"Equatorial Saki",latin:"Pithecia aequatorialis",cat:"mammal",s:"vu",h:"day"},
+{name:"White-fronted Capuchin",latin:"Cebus albifrons",cat:"mammal",s:"lc",h:"day"},
+{name:"Pygmy Marmoset",latin:"Cebuella pygmaea",cat:"mammal",s:"vu",h:"day"},
+{name:"Night Monkey",latin:"Aotus vociferans",cat:"mammal",s:"lc",h:"night"},
+{name:"Giant River Otter",latin:"Pteronura brasiliensis",cat:"mammal",s:"en",h:"day"},
+{name:"Neotropical River Otter",latin:"Lontra longicaudis",cat:"mammal",s:"nt",h:"both"},
+{name:"South American Tapir",latin:"Tapirus terrestris",cat:"mammal",s:"vu",h:"night"},
+{name:"White-lipped Peccary",latin:"Tayassu pecari",cat:"mammal",s:"vu",h:"both"},
+{name:"Collared Peccary",latin:"Pecari tajacu",cat:"mammal",s:"lc",h:"both"},
+{name:"Nine-banded Armadillo",latin:"Dasypus novemcinctus",cat:"mammal",s:"lc",h:"night"},
+{name:"Giant Armadillo",latin:"Priodontes maximus",cat:"mammal",s:"vu",h:"night"},
+{name:"Lowland Paca",latin:"Cuniculus paca",cat:"mammal",s:"lc",h:"night"},
+{name:"South American Coati",latin:"Nasua nasua",cat:"mammal",s:"lc",h:"day"},
+{name:"Ocelot",latin:"Leopardus pardalis",cat:"mammal",s:"lc",h:"night"},
+{name:"Margay",latin:"Leopardus wiedii",cat:"mammal",s:"nt",h:"night"},
+{name:"Jaguar",latin:"Panthera onca",cat:"mammal",s:"vu",h:"night"},
+{name:"Boto Pink River Dolphin",latin:"Inia geoffrensis",cat:"mammal",s:"en",h:"day"},
+{name:"Tucuxi",latin:"Sotalia fluviatilis",cat:"mammal",s:"en",h:"day"},
+{name:"Common Vampire Bat",latin:"Desmodus rotundus",cat:"mammal",s:"lc",h:"night"},
+{name:"Greater Fishing Bat",latin:"Noctilio leporinus",cat:"mammal",s:"lc",h:"night"},
+{name:"Silky Anteater",latin:"Cyclopes didactylus",cat:"mammal",s:"lc",h:"night"},
+{name:"Southern Tamandua",latin:"Tamandua tetradactyla",cat:"mammal",s:"lc",h:"night"},
+{name:"Giant Anteater",latin:"Myrmecophaga tridactyla",cat:"mammal",s:"vu",h:"both"},
+{name:"Common Squirrel Monkey",latin:"Saimiri sciureus",cat:"mammal",s:"lc",h:"day"},
+{name:"Brown-throated Sloth",latin:"Bradypus variegatus",cat:"mammal",s:"lc",h:"day"},
+{name:"Two-toed Sloth",latin:"Choloepus didactylus",cat:"mammal",s:"lc",h:"night"},
+{name:"Capybara",latin:"Hydrochoerus hydrochaeris",cat:"mammal",s:"lc",h:"day"},
+{name:"Common Caiman",latin:"Caiman crocodilus",cat:"reptile",s:"lc",h:"night"},
+{name:"Black Caiman",latin:"Melanosuchus niger",cat:"reptile",s:"lc",h:"night"},
+{name:"Green Anaconda",latin:"Eunectes murinus",cat:"reptile",s:"vu",h:"both"},
+{name:"Amazon Tree Boa",latin:"Corallus hortulanus",cat:"reptile",s:"lc",h:"night"},
+{name:"Emerald Tree Boa",latin:"Corallus caninus",cat:"reptile",s:"lc",h:"night"},
+{name:"Rainbow Boa",latin:"Epicrates cenchria",cat:"reptile",s:"lc",h:"night"},
+{name:"Amazon Bushmaster",latin:"Lachesis muta",cat:"reptile",s:"nt",h:"night"},
+{name:"Fer-de-Lance",latin:"Bothrops atrox",cat:"reptile",s:"lc",h:"night"},
+{name:"False Coral Snake",latin:"Oxyrhopus petolarius",cat:"reptile",s:"lc",h:"night"},
+{name:"Amazon Coral Snake",latin:"Micrurus spixii",cat:"reptile",s:"lc",h:"night"},
+{name:"Common Basilisk",latin:"Basiliscus americanus",cat:"reptile",s:"lc",h:"day"},
+{name:"Amazon Racerunner",latin:"Ameiva ameiva",cat:"reptile",s:"lc",h:"day"},
+{name:"Common Tegu",latin:"Salvator merianae",cat:"reptile",s:"lc",h:"day"},
+{name:"Amazon River Turtle",latin:"Podocnemis expansa",cat:"reptile",s:"vu",h:"day"},
+{name:"Yellow-spotted River Turtle",latin:"Podocnemis unifilis",cat:"reptile",s:"vu",h:"day"},
+{name:"Mata-mata Turtle",latin:"Chelus fimbriata",cat:"reptile",s:"lc",h:"night"},
+{name:"Amazon Wood Lizard",latin:"Enyalioides laticeps",cat:"reptile",s:"lc",h:"night"},
+{name:"Parrot Snake",latin:"Leptophis ahaetulla",cat:"reptile",s:"lc",h:"day"},
+{name:"Vine Snake",latin:"Oxybelis fulgidus",cat:"reptile",s:"lc",h:"day"},
+{name:"Freshwater Stingray",latin:"Potamotrygon motoro",cat:"reptile",s:"vu",h:"day"},
+{name:"Epipedobates tricolor",latin:"Epipedobates tricolor",cat:"amphibian",s:"en",h:"night"},
+{name:"Amazon Milk Frog",latin:"Trachycephalus resinifictrix",cat:"amphibian",s:"lc",h:"night"},
+{name:"Giant Monkey Frog",latin:"Phyllomedusa bicolor",cat:"amphibian",s:"lc",h:"night"},
+{name:"Smoky Jungle Frog",latin:"Leptodactylus pentadactylus",cat:"amphibian",s:"lc",h:"night"},
+{name:"Cane Toad",latin:"Rhinella marina",cat:"amphibian",s:"lc",h:"night"},
+{name:"Glass Frog",latin:"Centrolenella sp.",cat:"amphibian",s:"lc",h:"night"},
+{name:"Gladiator Tree Frog",latin:"Boana boans",cat:"amphibian",s:"lc",h:"night"},
+{name:"Red-eyed Tree Frog",latin:"Agalychnis callidryas",cat:"amphibian",s:"lc",h:"night"},
+{name:"Lemur Leaf Frog",latin:"Agalychnis lemur",cat:"amphibian",s:"cr",h:"night"},
+{name:"Suriname Horned Frog",latin:"Ceratophrys cornuta",cat:"amphibian",s:"lc",h:"night"},
+{name:"Tungara Frog",latin:"Engystomops pustulosus",cat:"amphibian",s:"lc",h:"night"},
+{name:"Blue Poison Dart Frog",latin:"Dendrobates tinctorius",cat:"amphibian",s:"lc",h:"night"},
+{name:"Aquatic Caecilian",latin:"Typhlonectes natans",cat:"amphibian",s:"lc",h:"night"},
+{name:"Waxy Monkey Frog",latin:"Phyllomedusa sauvagii",cat:"amphibian",s:"lc",h:"night"},
+{name:"Harpy Eagle",latin:"Harpia harpyja",cat:"bird",s:"vu",h:"day"},
+{name:"Hoatzin",latin:"Opisthocomus hoazin",cat:"bird",s:"lc",h:"day"},
+{name:"Scarlet Macaw",latin:"Ara macao",cat:"bird",s:"lc",h:"day"},
+{name:"Blue-and-yellow Macaw",latin:"Ara ararauna",cat:"bird",s:"lc",h:"day"},
+{name:"Military Macaw",latin:"Ara militaris",cat:"bird",s:"vu",h:"day"},
+{name:"Mealy Amazon Parrot",latin:"Amazona farinosa",cat:"bird",s:"lc",h:"day"},
+{name:"Channel-billed Toucan",latin:"Ramphastos vitellinus",cat:"bird",s:"lc",h:"day"},
+{name:"White-throated Toucan",latin:"Ramphastos tucanus",cat:"bird",s:"lc",h:"day"},
+{name:"Lettered Aracari",latin:"Pteroglossus inscriptus",cat:"bird",s:"lc",h:"day"},
+{name:"Sunbittern",latin:"Eurypyga helias",cat:"bird",s:"lc",h:"day"},
+{name:"Zigzag Heron",latin:"Zebrilus undulatus",cat:"bird",s:"lc",h:"day"},
+{name:"Agami Heron",latin:"Agamia agami",cat:"bird",s:"vu",h:"day"},
+{name:"Capped Heron",latin:"Pilherodius pileatus",cat:"bird",s:"lc",h:"day"},
+{name:"Black-collared Hawk",latin:"Busarellus nigricollis",cat:"bird",s:"lc",h:"day"},
+{name:"Osprey",latin:"Pandion haliaetus",cat:"bird",s:"lc",h:"day"},
+{name:"Amazonian Umbrellabird",latin:"Cephalopterus ornatus",cat:"bird",s:"lc",h:"day"},
+{name:"Cock-of-the-rock",latin:"Rupicola peruvianus",cat:"bird",s:"lc",h:"day"},
+{name:"Laughing Falcon",latin:"Herpetotheres cachinnans",cat:"bird",s:"lc",h:"day"},
+{name:"Rufescent Tiger-Heron",latin:"Tigrisoma lineatum",cat:"bird",s:"lc",h:"day"},
+{name:"Amazon Kingfisher",latin:"Chloroceryle amazona",cat:"bird",s:"lc",h:"day"},
+{name:"Pygmy Kingfisher",latin:"Chloroceryle aenea",cat:"bird",s:"lc",h:"day"},
+{name:"Ringed Kingfisher",latin:"Megaceryle torquata",cat:"bird",s:"lc",h:"day"},
+{name:"Black Skimmer",latin:"Rynchops niger",cat:"bird",s:"lc",h:"day"},
+{name:"Pauraque",latin:"Nyctidromus albicollis",cat:"bird",s:"lc",h:"night"},
+{name:"Common Potoo",latin:"Nyctibius griseus",cat:"bird",s:"lc",h:"night"},
+{name:"Spectacled Owl",latin:"Pulsatrix perspicillata",cat:"bird",s:"lc",h:"night"},
+{name:"Mottled Owl",latin:"Ciccaba virgata",cat:"bird",s:"lc",h:"night"},
+{name:"Amazonian Pygmy-Owl",latin:"Glaucidium hardyi",cat:"bird",s:"lc",h:"night"},
+{name:"Horned Screamer",latin:"Anhima cornuta",cat:"bird",s:"lc",h:"day"},
+{name:"Jabiru Stork",latin:"Jabiru mycteria",cat:"bird",s:"lc",h:"day"},
+{name:"White-plumed Antbird",latin:"Pithys albifrons",cat:"bird",s:"lc",h:"day"},
+{name:"Oilbird",latin:"Steatornis caripensis",cat:"bird",s:"lc",h:"night"},
+{name:"Arapaima",latin:"Arapaima gigas",cat:"fish",s:"vu",h:"day"},
+{name:"Red-bellied Piranha",latin:"Pygocentrus nattereri",cat:"fish",s:"lc",h:"day"},
+{name:"Black Piranha",latin:"Serrasalmus rhombeus",cat:"fish",s:"lc",h:"day"},
+{name:"Electric Eel",latin:"Electrophorus electricus",cat:"fish",s:"lc",h:"night"},
+{name:"Banded Knifefish",latin:"Gymnotus carapo",cat:"fish",s:"lc",h:"night"},
+{name:"Goliath Catfish",latin:"Brachyplatystoma filamentosum",cat:"fish",s:"vu",h:"day"},
+{name:"Red-tailed Catfish",latin:"Phractocephalus hemioliopterus",cat:"fish",s:"lc",h:"day"},
+{name:"Tiger Shovelnose Catfish",latin:"Pseudoplatystoma tigrinum",cat:"fish",s:"lc",h:"day"},
+{name:"Oscar Fish",latin:"Astronotus ocellatus",cat:"fish",s:"lc",h:"day"},
+{name:"Wild Discus",latin:"Symphysodon aequifasciatus",cat:"fish",s:"lc",h:"day"},
+{name:"Altum Angelfish",latin:"Pterophyllum altum",cat:"fish",s:"lc",h:"day"},
+{name:"Silver Arowana",latin:"Osteoglossum bicirrhosum",cat:"fish",s:"lc",h:"day"},
+{name:"Payara Vampire Fish",latin:"Hydrolycus scomberoides",cat:"fish",s:"lc",h:"day"},
+{name:"Pacu",latin:"Colossoma macropomum",cat:"fish",s:"lc",h:"day"},
+{name:"Peacock Bass",latin:"Cichla monoculus",cat:"fish",s:"lc",h:"day"},
+{name:"Pink-toe Tarantula",latin:"Avicularia avicularia",cat:"arachnid",s:"lc",h:"night"},
+{name:"Goliath Bird-eating Spider",latin:"Theraphosa blondi",cat:"arachnid",s:"lc",h:"night"},
+{name:"Wandering Spider",latin:"Phoneutria fera",cat:"arachnid",s:"lc",h:"night"},
+{name:"Amazon Scorpion",latin:"Tityus cambridgei",cat:"arachnid",s:"lc",h:"night"},
+{name:"Whip Spider",latin:"Heterophrynus longicornis",cat:"arachnid",s:"lc",h:"night"},
+{name:"Amazon Giant Centipede",latin:"Scolopendra gigantea",cat:"arachnid",s:"lc",h:"night"},
+{name:"Blue Morpho Butterfly",latin:"Morpho menelaus",cat:"invertebrate",s:"lc",h:"day"},
+{name:"Owl Butterfly",latin:"Caligo memnon",cat:"invertebrate",s:"lc",h:"night"},
+{name:"Postman Butterfly",latin:"Heliconius melpomene",cat:"invertebrate",s:"lc",h:"day"},
+{name:"Leafcutter Ant",latin:"Atta cephalotes",cat:"invertebrate",s:"lc",h:"both"},
+{name:"Bullet Ant",latin:"Paraponera clavata",cat:"invertebrate",s:"lc",h:"night"},
+{name:"Army Ant",latin:"Eciton burchellii",cat:"invertebrate",s:"lc",h:"both"},
+{name:"Hercules Beetle",latin:"Dynastes hercules",cat:"invertebrate",s:"lc",h:"night"},
+{name:"Titan Longhorn Beetle",latin:"Titanus giganteus",cat:"invertebrate",s:"lc",h:"night"},
+{name:"Elephant Beetle",latin:"Megasoma elephas",cat:"invertebrate",s:"lc",h:"night"},
+{name:"Amazon Giant Stick Insect",latin:"Phobaeticus chani",cat:"invertebrate",s:"lc",h:"night"},
+{name:"Peanut-head Bug",latin:"Fulgora laternaria",cat:"invertebrate",s:"lc",h:"night"},
+{name:"Giant Water Bug",latin:"Lethocerus maximus",cat:"invertebrate",s:"lc",h:"night"},
+{name:"Violin Mantis",latin:"Gongylus gongyloides",cat:"invertebrate",s:"lc",h:"night"},
+{name:"Amazon River Prawn",latin:"Macrobrachium amazonicum",cat:"invertebrate",s:"lc",h:"day"},
+{name:"Giant Damselfly",latin:"Megaloprepus caerulatus",cat:"invertebrate",s:"lc",h:"day"},
+{name:"Amazon Giant Millipede",latin:"Narceus gordanus",cat:"invertebrate",s:"lc",h:"night"},
+];
+const D={
+"Potos flavus":"A nocturnal golden-furred carnivore using its prehensile tail as a fifth limb. Often heard before seen — a high-pitched screech piercing the forest night.",
+"Lagothrix lagothricha":"One of the Amazon's largest primates, in troops of 20-70. Critical seed dispersers; the prehensile tail anchors them over the river.",
+"Pithecia aequatorialis":"A shaggy-furred saki with a monk-like cap. Cracks extremely hard seeds that no other primate can open.",
+"Cebus albifrons":"Highly intelligent capuchins that use stones to crack palm nuts. The most frequently sighted primates from river canoes.",
+"Cebuella pygmaea":"The world's smallest monkey — just 100 g — gouging bark to lap gum from trunks. Easier to find by their high-pitched calls.",
+"Aotus vociferans":"The only truly nocturnal monkey. Its enormous eyes gather maximum light; haunting calls fill the forest from dusk to dawn.",
+"Pteronura brasiliensis":"The 'river wolf' — up to 1.8 m long and fiercely territorial. Groups coordinate to herd and ambush fish in open water.",
+"Lontra longicaudis":"Slimmer and more solitary than the giant otter. Often spotted at dawn in quiet side channels, flipping rocks for crabs.",
+"Tapirus terrestris":"The largest terrestrial mammal in South America — a living fossil. Swims rivers freely and uses water to escape jaguars at night.",
+"Tayassu pecari":"Herds of hundreds crashing through undergrowth sound like distant thunder. Their powerful musk glands leave a pervasive odour on jungle trails.",
+"Pecari tajacu":"Smaller and more common than the white-lipped peccary. Encountered in family groups along riverbanks at dawn.",
+"Dasypus novemcinctus":"Rummages through leaf litter sniffing out beetles and grubs. Startled individuals can leap a full metre into the air.",
+"Priodontes maximus":"The size of a large dog, it tears open concrete-hard termite mounds with scythe-like front claws. Extremely rare and secretive.",
+"Cuniculus paca":"A large spotted rodent that freezes under torchlight, its white spots mimicking moonlight filtering through leaves.",
+"Nasua nasua":"Bands of females move noisily through the forest in daylight, turning over logs and probing soil with their flexible snouts.",
+"Leopardus pardalis":"The most commonly encountered large cat of the Amazonian night. Hunts alone, silently tracking prey along river edges.",
+"Leopardus wiedii":"An extraordinarily arboreal cat that rotates its hind ankles 180 degrees to descend trees headfirst. Hunts in the lower canopy at night.",
+"Panthera onca":"The Americas largest cat and apex predator. An exceptional swimmer, most active at night along river edges near Tena.",
+"Inia geoffrensis":"The legendary pink river dolphin navigates flooded forest by echolocation. Its flexible neck rotates 180 degrees to track fish among submerged roots.",
+"Sotalia fluviatilis":"Smaller and shyer than the boto, the tucuxi travels in family groups and frequently leaps alongside river boats.",
+"Desmodus rotundus":"Lands silently, uses heat sensors to find a blood vessel, and laps blood through an anticoagulant-laced tongue. Never sucks.",
+"Noctilio leporinus":"Gaff-hooks fish with elongated hind feet while skimming the river surface, using echolocation to detect tiny fish-made ripples.",
+"Cyclopes didactylus":"The silky anteater is lemon-sized and virtually never seen on the ground. Clings to branches all night with hooked claws.",
+"Tamandua tetradactyla":"Tears open arboreal termite nests with powerful forearms. The strong prehensile tail acts as a fifth limb in the canopy.",
+"Myrmecophaga tridactyla":"Walks on its knuckles to protect long curved claws that can tear apart concrete-hard termite mounds. Classified as vulnerable.",
+"Saimiri sciureus":"Troops of 30-100 squirrel monkeys forage in a noisy wave through the mid-canopy, following other species to exploit flushed insects.",
+"Bradypus variegatus":"Descends to the river edge to drink at dawn. Its fur grows algae, providing a greenish tint as active camouflage.",
+"Choloepus didactylus":"The two-toed sloth is nocturnal and more active than its three-toed cousin. Found hanging over water at night, surprisingly strong.",
+"Hydrochoerus hydrochaeris":"The world's largest rodent, grazing in family groups on riverbanks at dawn and dusk. Excellent swimmer, submerging for several minutes.",
+"Caiman crocodilus":"The most abundant crocodilian in the Amazon. Eyes glow orange-red under torchlight, dotting the surface of quiet backwaters.",
+"Melanosuchus niger":"Can exceed 4 m. The apex aquatic predator of Amazonian waterways, hunting capybaras and large fish by night.",
+"Eunectes murinus":"The heaviest snake in the world — up to 8 m and 250 kg. Ambushes prey at water's edge; swims with only nostrils above the surface.",
+"Corallus hortulanus":"Drapes motionless over riverbank branches at night, striking at bats and birds with heat-sensing pit organs.",
+"Corallus caninus":"A luminous green arboreal ambush predator coiled on branches directly over water. White saddle markings make it unmistakable.",
+"Epicrates cenchria":"In daylight, iridescent scales produce a full spectrum of prismatic colour. Hunts small mammals at night on the forest floor.",
+"Lachesis muta":"The largest venomous snake in the Americas, reaching 3.5 m. Ambushes rodents on the forest floor, remaining motionless for days.",
+"Bothrops atrox":"The most medically significant snake in the Amazon, responsible for more bites than any other species. Perfectly camouflaged in leaf litter.",
+"Oxyrhopus petolarius":"A harmless mimic of the deadly coral snake, using red, black and yellow bands. Most active at night along forest trails.",
+"Micrurus spixii":"One of the true coral snakes with neurotoxic venom. Rarely encountered but always treated with extreme respect.",
+"Basiliscus americanus":"Runs bipedally across water surfaces at up to 8 km/h. Known as the Jesus Christ lizard along the riverbank.",
+"Ameiva ameiva":"Flashes through sunny forest clearings and riverbanks with lightning speed. Males develop emerald-green flanks in breeding season.",
+"Salvator merianae":"A large, powerful lizard that swims freely across rivers. Excavates burrows in sandy banks and preys on other reptile eggs.",
+"Podocnemis expansa":"The largest South American freshwater turtle, basking in enormous groups on river beaches. Females travel kilometres to nest on the same sandbanks each year.",
+"Podocnemis unifilis":"Recognisable by yellow head spots. Nests on sandy river beaches between July and September when water levels drop.",
+"Chelus fimbriata":"One of the most bizarre animals on Earth — a flattened shell with a leaf-like head and algae-covered skin for total camouflage.",
+"Enyalioides laticeps":"A dragon-like lizard resting motionless on tree trunks at night, its rough grey-green skin invisible against bark.",
+"Leptophis ahaetulla":"A slender iridescent-green snake racing through foliage alongside rivers. Hunts frogs and lizards with bold, fast strikes.",
+"Oxybelis fulgidus":"A vine snake so thin it is virtually invisible dangling from riverside vegetation, waiting to lunge at passing lizards.",
+"Potamotrygon motoro":"A freshwater stingray resting on the sandy riverbed, almost perfectly camouflaged. Its serrated tail spine causes excruciating wounds.",
+"Epipedobates tricolor":"An Ecuadorian endemic whose skin secretion inspired epibatidine development — a painkiller 200 times more potent than morphine.",
+"Trachycephalus resinifictrix":"A striking grey, white and orange tree frog that breeds in water-filled tree holes in the canopy. Its call is a loud repeating bonk.",
+"Phyllomedusa bicolor":"Produces a powerful secretion known as kambo used in indigenous ceremonies. One of the largest tree frogs in the Amazon.",
+"Leptodactylus pentadactylus":"The largest leptodactylid frog — dinner-plate-sized and aggressive. Its deep call resonates through the jungle each night.",
+"Rhinella marina":"A massive toad producing bufotoxins lethal to most predators. Gathers under lights at night to hunt attracted insects.",
+"Centrolenella sp.":"Tiny, translucent frogs clinging to leaves above streams. Their heart and digestive organs are visible through the skin by torchlight.",
+"Boana boans":"A giant tree frog reaching 12 cm. Males guard foam nests in shallow water, calling loudly all night near jungle streams.",
+"Agalychnis callidryas":"The red-eyed tree frog — enormous ruby eyes, electric-green body, blue-and-yellow flanks. The poster species of tropical rainforests.",
+"Agalychnis lemur":"One of the rarest frogs in Ecuador. Critically endangered; a highlight of any night walk in Napo's cloud-forest transition zone.",
+"Ceratophrys cornuta":"An ambush predator buried in leaf litter with only its head exposed, lunging at anything that passes — including mice and other frogs.",
+"Engystomops pustulosus":"Males inflate a large vocal sac and produce a complex call — a whine followed by a chuck — to attract females to foam nests.",
+"Dendrobates tinctorius":"Bold cobalt-blue and black morphs unmistakable on the rainforest floor. Males carry tadpoles on their backs to isolated bromeliad pools.",
+"Typhlonectes natans":"A legless, burrowing amphibian resembling a worm. Entirely aquatic in this species; found in riverbanks and muddy stream edges.",
+"Phyllomedusa sauvagii":"Moves with a slow hand-over-hand walk unique among frogs. Coats itself with waxy lipids to resist desiccation.",
+"Harpia harpyja":"The most powerful bird of prey on Earth — talons the size of a grizzly's claws. Snatches sloths and monkeys from the canopy in near-silence.",
+"Opisthocomus hoazin":"The punk-rock bird — clumsy, ancient, with a spiky crest and a gut that ferments leaves. Nests directly over the river.",
+"Ara macao":"Brilliant scarlet and gold macaws flying in pairs are the defining image of the Amazonian river at dawn, calling raucously.",
+"Ara ararauna":"Pairs of blue-and-gold macaws fly in the early morning, often in mixed flocks with scarlet macaws.",
+"Ara militaris":"A vulnerable military macaw in the Napo valley; identified by its green body, red forehead and blue flight feathers.",
+"Amazona farinosa":"The largest Amazon parrot, detected by loud bugle-like calls at dawn as flocks fly to clay licks.",
+"Ramphastos vitellinus":"The channel-billed toucan's absurdly large bill is hollow — lightweight and used as a thermoregulator as much as a feeding tool.",
+"Ramphastos tucanus":"Pairs call with yelping notes through the canopy. The white bib is visible at great distances from the river.",
+"Pteroglossus inscriptus":"A compact aracari with inscribed markings on its yellow bill. Roosts communally in tree cavities, sometimes six birds sharing one hole.",
+"Eurypyga helias":"The sunbittern stalks fish along rocky streams. When threatened it spreads wings to reveal enormous eye-spots in an explosive defensive display.",
+"Zebrilus undulatus":"One of the most sought-after birds in Amazonian Ecuador — a tiny, cryptic heron standing motionless in dense riverbank vegetation.",
+"Agamia agami":"A jewel of Amazon rivers — iridescent blue-green plumage and a chestnut breast, stalking fish in shaded forest pools.",
+"Pilherodius pileatus":"An elegant white heron with a distinctive black cap and blue facial skin. Stands motionless on low branches overhanging the river.",
+"Busarellus nigricollis":"The fish hawk of South America — soars low over rivers and dives feet-first for fish, remarkably like an osprey.",
+"Pandion haliaetus":"Plunges talons-first into the river from 30 m. Reversible outer toes and spiny foot-pads grip wet, struggling fish.",
+"Cephalopterus ornatus":"The male's umbrella-shaped crest and long inflatable wattle are displayed at forest leks with booming calls audible 500 m away.",
+"Rupicola peruvianus":"Males gather at traditional leks where their shocking orange plumage lights up the forest shade — one of Ecuador's most vivid birds.",
+"Herpetotheres cachinnans":"Its maniacal laughing call is one of the most distinctive sounds of the Amazonian forest edge, often heard at dawn and dusk.",
+"Tigrisoma lineatum":"A large tiger-heron camouflaged with rufous and black barring. Stands motionless on riverbank logs for hours before striking at fish.",
+"Chloroceryle amazona":"A large green-and-white kingfisher hovering over the river before plunging. Perches conspicuously on branches over open water.",
+"Chloroceryle aenea":"The pygmy kingfisher is sparrow-sized and easily overlooked, darting at speed through dense riverside vegetation.",
+"Megaceryle torquata":"The largest kingfisher in the Americas, flying fast and low with loud rattling calls that announce its presence.",
+"Rynchops niger":"Flies just above the water surface with its longer lower mandible slicing through it, snapping up fish entirely by touch.",
+"Nyctidromus albicollis":"The pauraque's red eye-shine is one of the most commonly seen reflections on Amazonian night walks — it rests on open trails.",
+"Nyctibius griseus":"By day it sits motionless atop a broken branch, resembling a dead stub. At night it hunts large insects on the wing.",
+"Pulsatrix perspicillata":"A large owl with spectacled white facial markings, hunting from a high perch and dropping onto prey up to monkey-size.",
+"Ciccaba virgata":"The mottled owl fills the Amazon night with deep, resonant hoots. It often approaches human voices out of curiosity.",
+"Glaucidium hardyi":"A tiny owl calling long series of hollow toots through the night forest. Disproportionately fearless — hunts prey larger than itself.",
+"Anhima cornuta":"An extraordinary prehistoric-looking bird with a horn on its forehead. Its loud trumpeting carries for kilometres along the floodplain.",
+"Jabiru mycteria":"The tallest flying bird in the Americas — over 1.4 m — wading in shallow river margins, its massive bill scooping fish and frogs.",
+"Pithys albifrons":"Follows army ant swarms to feast on flushed insects and small animals, moving with restless mixed flocks through the understory.",
+"Steatornis caripensis":"Navigates the deepest caves by echolocation audible to humans. Fruits exclusively, regurgitating seeds far from the source.",
+"Arapaima gigas":"One of the world's largest freshwater fish, surfacing every 10-20 minutes to breathe air through a modified swim bladder. Can reach 3 m.",
+"Pygocentrus nattereri":"Frenzied feeding occurs when concentrated, but they mostly scavenge. Red belly visible as they turn in sunlit water.",
+"Serrasalmus rhombeus":"The largest and most aggressive piranha, with a diamond-shaped body and powerful shearing bite. Found in deeper, darker channels.",
+"Electrophorus electricus":"Can generate 860 volts — enough to stun a horse. Uses low-voltage pulses to navigate and high-voltage pulses to immobilise prey.",
+"Gymnotus carapo":"Generates weak electric fields to navigate and communicate in the darkness. Detectable with simple field sensors.",
+"Brachyplatystoma filamentosum":"A migratory giant catfish travelling thousands of kilometres from the Amazon mouth to Andean foothill rivers like the Napo to spawn.",
+"Phractocephalus hemioliopterus":"An iconic red-and-grey catfish with a vivid orange-red tail. A prized game fish throughout the upper Amazon.",
+"Pseudoplatystoma tigrinum":"A powerful, tiger-striped catfish of the open river channel. A top predator hunting by ambush in turbid Andean foothill rivers.",
+"Astronotus ocellatus":"Develops a striking eye-spot on its tail base to confuse predators. One of the most recognisable fish of the mid-Amazon.",
+"Symphysodon aequifasciatus":"The wild discus — flat and iridescent — lives in slow blackwater areas around submerged roots. Crown jewel of Amazon ornamental fish.",
+"Pterophyllum altum":"The tallest of the wild angelfish, living in deep blackwater rivers. Navigates through dense stands of submerged grass.",
+"Osteoglossum bicirrhosum":"The arowana leaps up to 3 m clear of the water to snatch insects, birds and small bats from overhanging branches.",
+"Hydrolycus scomberoides":"The vampire fish has two enormous hollow fangs pointing upward that pierce its closed upper jaw — used to impale fast-moving prey.",
+"Colossoma macropomum":"The pacu's human-like teeth crush hard seeds — one of the Amazon's key seed dispersers in seasonally flooded forest.",
+"Cichla monoculus":"The peacock bass is the Amazon's premier game fish — an ambush predator with lightning reflexes, lurking near submerged logs.",
+"Avicularia avicularia":"The pink-toed tarantula is an arboreal hunter, running upside down across leaves and bark at night. Flicks urticating hairs when threatened.",
+"Theraphosa blondi":"The world's largest spider by mass — big enough to cover a dinner plate. Preys on frogs, small snakes, and bats. Defensive hissing audible from metres away.",
+"Phoneutria fera":"The wandering spider roams the forest floor at night — one of the world's most venomous spiders. Actively pursues prey without a web.",
+"Tityus cambridgei":"A large amber-coloured scorpion hiding under bark and debris. Venom is medically significant; found near settlements around Tena.",
+"Heterophrynus longicornis":"A whip spider with legs spanning 60 cm. Entirely harmless to humans — it navigates by touch using whip-like sensory appendages.",
+"Scolopendra gigantea":"The Amazon giant centipede reaches 30 cm and delivers a bite painful enough to require hospital treatment. Hunts bats by clinging to cave ceilings.",
+"Morpho menelaus":"The male blue morpho's iridescence is caused by light diffracting off microscopic scales — there is no blue pigment at all.",
+"Caligo memnon":"The owl butterfly rests at dusk with wings spread, revealing enormous eye-spots that resemble a great horned owl's face.",
+"Heliconius melpomene":"Part of an extraordinary mimicry complex spanning dozens of Amazon species. Uniquely among butterflies, it collects pollen as a protein source.",
+"Atta cephalotes":"Leafcutter ant columns are the Amazon's highways — visible day and night as a ribbon of cut leaf fragments heading to underground fungus gardens.",
+"Paraponera clavata":"The bullet ant's sting is rated highest on the Schmidt pain index — pure, intense, brilliant pain, like walking over flaming charcoal. Active all night.",
+"Eciton burchellii":"Army ant swarms of 200,000 individuals flush insects, lizards and frogs from the forest floor in a relentless moving wave of predation.",
+"Dynastes hercules":"The world's longest beetle — males have a thoracic horn up to 9 cm. Attracted to light traps and tree sap at night.",
+"Titanus giganteus":"Possibly the largest beetle by body mass. Rarely seen; drawn to lights on humid nights near Tena. Its mandibles can snap a pencil in half.",
+"Megasoma elephas":"The elephant beetle — massive males covered in dense yellow-brown hair. Feeds on tree sap and rotting fruit, flying at night.",
+"Phobaeticus chani":"Among the longest insects on Earth — over 35 cm with legs extended. Sits motionless on vegetation at night, looking exactly like a stick.",
+"Fulgora laternaria":"The peanut-head bug has a hollow head shaped like a caiman skull. At rest it reveals vivid eye-spots on its hindwings.",
+"Lethocerus maximus":"One of the world's largest insects — up to 12 cm. An aquatic ambush predator that injects a liquefying enzyme through its rostrum.",
+"Gongylus gongyloides":"The violin mantis holds its body bent like a violin neck, swaying to mimic a dead leaf blowing in the breeze while hunting at night.",
+"Macrobrachium amazonicum":"Large transparent prawns seen under torchlight in river shallows. Eyes glow red in the beam — an important food source for riverine communities.",
+"Megaloprepus caerulatus":"The world's largest damselfly, with a 19 cm wingspan. Males defend water-filled tree holes with slow, drifting territorial display flights.",
+"Narceus gordanus":"A giant millipede that curls into a spiral when threatened, releasing a pungent hydrogen cyanide deterrent from glands along its flanks.",
+};
+const SI={cr:{l:"CRITICAL",c:"scr"},en:{l:"ENDANGERED",c:"sen"},vu:{l:"VULNERABLE",c:"svu"},nt:{l:"NEAR THREAT",c:"snt"},lc:{l:"LEAST CONCERN",c:"slc"}};
+const KEY='amazondex_tena_v1';
+let disc=new Map(),filt='all';
+const imgs={};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(Object.fromEntries(disc)));syn('ok');}catch(e){syn('err');}}
+function load(){try{const r=localStorage.getItem(KEY);if(r)disc=new Map(Object.entries(JSON.parse(r)));}catch(e){}}
+function syn(s){
+  let el=document.getElementById('ss');
+  if(!el){el=document.createElement('div');el.id='ss';document.body.appendChild(el);}
+  if(s==='ok'){el.style.color='#30e050';el.style.borderColor='#30e050';el.style.opacity='1';el.textContent='SAVED';setTimeout(()=>{el.style.opacity='0';},1400);}
+  else{el.style.color='#ff4020';el.style.borderColor='#ff4020';el.style.opacity='1';el.textContent='ERROR';}
+}
+function stats(){
+  const t=A.length;let s=0,n=0,r=0;
+  disc.forEach((v,l)=>{
+    if(v!=='seen')return;s++;
+    const a=A.find(x=>x.latin===l);if(!a)return;
+    if(a.h==='night')n++;else if(a.h==='day')r++;else{n++;r++;}
+  });
+  document.getElementById('sc').textContent=s;
+  document.getElementById('tc').textContent=t;
+  document.getElementById('nc').textContent=n;
+  document.getElementById('rc').textContent=r;
+  const p=Math.round(s/t*100);
+  document.getElementById('prp2').textContent=p+'%';
+  document.getElementById('prf').style.width=p+'%';
+}
+function mf(a){
+  const f=disc.get(a.latin);
+  if(filt==='all')return true;
+  if(filt==='unseen')return!f;
+  if(filt==='seen-found')return f==='seen';
+  if(filt==='night')return a.h==='night'||a.h==='both';
+  if(filt==='day')return a.h==='day'||a.h==='both';
+  if(filt==='both')return a.h==='both';
+  return a.cat===filt;
+}
+function hb(a){
+  if(a.h==='night')return'<span class="hbg hn">NIGHT</span>';
+  if(a.h==='day')return'<span class="hbg hd">RIVER</span>';
+  return'<span class="hbg hb">BOTH</span>';
+}
+function rc(a,i){
+  const card=document.createElement('div');
+  const f=disc.get(a.latin);
+  card.className='card '+(f==='seen'?'seen':'unseen');
+  card.dataset.latin=a.latin;
+  const num=String(i+1).padStart(3,'0');
+  const si=SI[a.s]||{l:a.s,c:''};
+  const ih=imgs[a.latin]
+    ?'<div class="ciw"><img class="cimg" src="'+imgs[a.latin]+'" alt="'+a.name+'" loading="lazy"></div>'
+    :'<div class="ciw"><div class="cph"><div class="spin"></div><span>SCANNING</span></div></div>';
+  const dh=D[a.latin]?'<p class="cdsc">'+D[a.latin]+'</p>':'<div class="cdsc ld"></div>';
+  const bg=f==='seen'?'<div class="fbg">SEEN</div>':'';
+  card.innerHTML='<div class="cnum">#'+num+'</div>'+bg+ih+'<div class="cbdy"><div class="ctr"><div class="ccat">'+a.cat.toUpperCase()+'</div>'+hb(a)+'</div><div class="cname">'+a.name+'</div><div class="clat">'+a.latin+'</div>'+dh+'<span class="stag '+si.c+'">'+si.l+'</span></div>';
+  card.addEventListener('click',()=>{
+    if(disc.get(a.latin)==='seen')disc.delete(a.latin);else disc.set(a.latin,'seen');
+    save();stats();card.replaceWith(rc(a,i));
+    if(['unseen','seen-found'].includes(filt))rg();
+  });
+  return card;
+}
+function rg(){
+  const g=document.getElementById('grid');g.innerHTML='';
+  const fl=A.filter(a=>mf(a));
+  if(!fl.length){g.innerHTML='<div class="empty">NO SPECIES MATCH<br>THIS FILTER</div>';stats();return;}
+  fl.forEach(a=>g.appendChild(rc(a,A.indexOf(a))));
+  stats();
+}
+document.querySelectorAll('.fb').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.fb').forEach(b=>b.classList.remove('act'));
+    btn.classList.add('act');filt=btn.dataset.f;rg();
+  });
+});
+function uci(latin,url){
+  const c=document.getElementById('grid').querySelector('[data-latin="'+CSS.escape(latin)+'"]');
+  if(!c)return;
+  const ph=c.querySelector('.cph');
+  if(ph&&url){const img=document.createElement('img');img.className='cimg';img.src=url;img.loading='lazy';ph.replaceWith(img);}
+}
+async function fi(latin){
+  try{
+    const r=await fetch('https://api.inaturalist.org/v1/taxa?q='+encodeURIComponent(latin)+'&per_page=1&rank=species',{headers:{'Accept':'application/json'}});
+    if(!r.ok)return null;
+    const d=await r.json();const t=d.results?.[0];if(!t)return null;
+    const p=t.default_photo;return p?.medium_url?.replace('/medium.','/large.')||p?.medium_url||null;
+  }catch{return null;}
+}
+async function loadImgs(){
+  const C=4;let i=0;
+  async function w(){while(i<A.length){const n=i++;const a=A[n];if(!imgs[a.latin]){const u=await fi(a.latin);if(u){imgs[a.latin]=u;uci(a.latin,u);}}}}
+  await Promise.all(Array.from({length:C},w));
+}
+load();rg();loadImgs();
+</script>
+</body>
+</html>
